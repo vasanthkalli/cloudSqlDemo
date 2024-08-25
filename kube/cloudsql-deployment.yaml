@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudsql-deployment
+  labels:
+    app: cloudsql
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cloudsql
+  template:
+    metadata:
+      labels:
+        app: cloudsql
+    spec:
+      containers:
+        - name: cloudsql
+          image: vasanthkalli/cloudsqlnewbuild:latest
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudsql-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: cloudsql
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
